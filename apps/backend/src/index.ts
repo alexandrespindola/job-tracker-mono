@@ -6,7 +6,17 @@ const app = new Hono()
 
 // CORS for frontend
 app.use('*', cors({
-  origin: 'http://localhost:5173'
+  origin: (origin) => {
+    // Allow localhost for development
+    if (origin?.includes('localhost')) return origin
+    // Allow Netlify domains
+    if (origin?.includes('.netlify.app')) return origin
+    // Allow Railway domains
+    if (origin?.includes('.railway.app')) return origin
+    // Default fallback
+    return 'http://localhost:5173'
+  },
+  credentials: true
 }))
 
 // Health check
