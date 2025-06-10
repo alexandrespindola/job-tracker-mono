@@ -1,7 +1,7 @@
 import type { JobResponse, JobSearchParams } from '../../../../packages/shared/src/types'
 
 class JobAPI {
-  private baseURL = import.meta.env.VITE_API_URL || 'http://localhost:3001'
+  private baseURL = import.meta.env.VITE_API_URL || '/.netlify/functions'
 
   async searchJobs(params: Partial<JobSearchParams> = {}): Promise<JobResponse> {
     const queryParams = new URLSearchParams({

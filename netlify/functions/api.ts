@@ -1,18 +1,13 @@
 import { Hono } from 'hono'
-import { cors } from 'hono/cors'
-import type { JobResponse, JobSearchParams } from '../../../packages/shared/src/types'
+import { handle } from 'hono/netlify'
+import type { JobResponse, JobSearchParams } from '@job-tracker/shared'
 
 const app = new Hono()
-
-// CORS for frontend
-app.use('*', cors({
-  origin: 'http://localhost:5173'
-}))
 
 // Health check
 app.get('/', (c) => c.json({ message: 'Job Tracker API running! 🚀' }))
 
-// API to fetch german job listings
+// API para buscar vagas alemãs
 app.get('/api/jobs', async (c) => {
   const params: JobSearchParams = {
     was: c.req.query('was') || 'junior entwickler',
@@ -57,8 +52,4 @@ app.get('/api/jobs', async (c) => {
   }
 })
 
-// Bun server configuration
-export default {
-  port: process.env.PORT || 3001,
-  fetch: app.fetch,
-}
+export const handler = handle(app)

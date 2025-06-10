@@ -5,8 +5,8 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "bun --filter backend dev & bun --filter frontend dev",
-    "build": "bun --filter shared build && bun run --filter backend build && bun run --filter frontend build",
+    "dev": "bun run --filter backend dev & bun run --filter frontend dev",
+    "build": "cd packages/shared && bun run build && cd ../.. && cd apps/backend && bun run build && cd ../frontend && bun run build",
     "clean": "rm -rf apps/*/dist packages/*/dist"
   },
   "devDependencies": {

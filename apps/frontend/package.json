@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:prod": "bun run build"
   },
   "dependencies": {
     "react": "^18.3.0",
