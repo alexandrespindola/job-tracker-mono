@@ -7,16 +7,3 @@ healthcheckPath = "/"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
-
-# Deploy only when backend or shared files change
-[watch]
-include = [
-  "apps/backend/**/*",
-  "packages/shared/**/*",
-  "railway.toml"
-]
-exclude = [
-  "apps/frontend/**/*",
-  "netlify/**/*",
-  "*.md"
-]

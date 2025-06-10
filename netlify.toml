@@ -7,9 +7,6 @@
   
   # Base directory of the project
   base = "."
-  
-  # Deploy only when frontend or shared files change
-  ignore = "bash scripts/ignore-netlify-build.sh"
 
 [build.environment]
   # Node.js version
