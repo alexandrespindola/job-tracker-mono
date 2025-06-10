@@ -1,5 +1,7 @@
 {
-  "name": "job-tracker",
+  "name": "job-tracker-monorepo",
+  "version": "1.0.0",
+  "private": true,
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -7,7 +9,12 @@
   "scripts": {
     "dev": "bun run --filter backend dev & bun run --filter frontend dev",
     "build": "cd packages/shared && bun run build && cd ../.. && cd apps/backend && bun run build && cd ../frontend && bun run build",
-    "clean": "rm -rf apps/*/dist packages/*/dist"
+    "clean": "rm -rf apps/*/dist packages/*/dist",
+    "start": "cd apps/backend && bun run start"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "bun": ">=1.0.0"
   },
   "devDependencies": {
     "typescript": "^5.3.0"
