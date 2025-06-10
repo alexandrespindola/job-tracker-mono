@@ -2,57 +2,6 @@ import { useState, useEffect } from 'react'
 import type { Job } from '../../../../packages/shared/src/types'
 import { jobAPI } from '../services/api'
 
-// Interface for cursor trail dots
-interface TrailDot {
-  id: number
-  x: number
-  y: number
-  color: string
-}
-
-// German Flag Cursor Trail Component
-const CursorTrail = () => {
-  const [trail, setTrail] = useState<TrailDot[]>([])
-  
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const germanColors = ['#000000', '#ff0000', '#ffce00'] // Black, Red, Gold
-      const newDot: TrailDot = {
-        id: Date.now() + Math.random(),
-        x: e.clientX,
-        y: e.clientY,
-        color: germanColors[Math.floor(Math.random() * 3)]
-      }
-      
-      setTrail(prev => [...prev.slice(-15), newDot]) // Keep last 15 dots
-    }
-    
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [])
-  
-  return (
-    <div className="fixed inset-0 pointer-events-none z-50">
-      {trail.map((dot, i) => (
-        <div
-          key={dot.id}
-          className="absolute rounded-full animate-fade-trail"
-          style={{
-            left: dot.x - 3,
-            top: dot.y - 3,
-            width: Math.max(6 - (i * 0.3), 1),
-            height: Math.max(6 - (i * 0.3), 1),
-            backgroundColor: dot.color,
-            opacity: Math.max(1 - (i * 0.08), 0),
-            boxShadow: `0 0 ${Math.max(8 - i, 2)}px ${dot.color}40`,
-            animation: `fade-trail 0.8s ease-out forwards`
-          }}
-        />
-      ))}
-    </div>
-  )
-}
-
 // Magnetic Card Component with advanced interactions
 const MagneticCard = ({ children, className = "", ...props }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -214,6 +163,7 @@ export const JobList = () => {
   const [totalJobs, setTotalJobs] = useState(0)
   const [currentPage, setCurrentPage] = useState(1)
   const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [showJobs, setShowJobs] = useState(false) // Control when to show jobs after animation
   
   // Filter states
   const [searchFilters, setSearchFilters] = useState({
@@ -231,6 +181,7 @@ export const JobList = () => {
       setLoading(true)
     } else {
       setIsLoadingMore(true)
+      setShowJobs(false) // Hide jobs during pagination
     }
     
     try {
@@ -244,6 +195,12 @@ export const JobList = () => {
       setTotalJobs(result.maxErgebnisse || 0)
       setCurrentPage(page)
       setSearchFilters(filters)
+      
+      // Show jobs after a small delay to allow for animation
+      setTimeout(() => {
+        setShowJobs(true)
+      }, 150)
+      
     } catch (error) {
       console.error('Error fetching jobs:', error)
     } finally {
@@ -278,6 +235,13 @@ export const JobList = () => {
     fetchJobs(1)
   }, [])
 
+  // Initialize showJobs when component mounts
+  useEffect(() => {
+    if (!loading && jobs.length > 0) {
+      setShowJobs(true)
+    }
+  }, [loading, jobs.length])
+
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto p-6 animate-fade-in">
@@ -301,17 +265,21 @@ export const JobList = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6 animate-fade-in">
-      {/* German Flag Cursor Trail */}
-      <CursorTrail />
-      
       {/* Click Pulse Effect */}
       <ClickPulse />
       
       {/* Hero Header */}
       <div className="text-center mb-12">
-        <h1 className="text-5xl md:text-6xl font-display font-bold mb-4">
-          <span className="text-gradient">Job Tracker</span>
-        </h1>
+        <div className="flex items-center justify-center gap-4 mb-4">
+          <img 
+            src="/apple-touch-icon.svg" 
+            alt="Job Tracker Logo" 
+            className="w-12 h-12 md:w-16 md:h-16 animate-pulse-glow logo-float"
+          />
+          <h1 className="text-5xl md:text-6xl font-display font-bold">
+            <span className="text-gradient">Job Tracker</span>
+          </h1>
+        </div>
         <p className="text-xl text-gray-300 font-light mb-2">Deutschland 🇩🇪</p>
         <p className="text-gray-400">Find your next opportunity in Germany's tech scene</p>
         <div className="h-1 w-24 bg-german-red mx-auto mt-4 rounded-full"></div>
@@ -399,9 +367,15 @@ export const JobList = () => {
       
       {/* Jobs Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-        {jobs.map((job, index) => (
-          <MagneticCard key={job.refnr} className="animate-slide-up" style={{animationDelay: `${index * 50}ms`}}>
-            <div className="glass-card glow-effect p-6 h-full">
+        {isLoadingMore && !showJobs ? (
+          // Show skeleton during pagination
+          Array.from({ length: 6 }).map((_, index) => (
+            <JobSkeleton key={`skeleton-${index}`} />
+          ))
+        ) : (
+          showJobs && jobs.map((job, index) => (
+            <MagneticCard key={job.refnr} className="animate-slide-up" style={{animationDelay: `${index * 50}ms`}}>
+              <div className="glass-card glow-effect p-6 h-full">
               {/* Job Header */}
               <div className="mb-4">
                 <h3 className="text-xl font-display font-semibold text-gray-100 mb-2 line-clamp-2 leading-tight">
@@ -445,9 +419,6 @@ export const JobList = () => {
                 </a>
               ) : (
                 <>
-                  <div className="text-xs text-german-gold font-medium mb-3 flex items-center justify-center bg-german-gold/10 py-2 px-3 rounded-lg">
-                    ⚠️ Alternative application options:
-                  </div>
                   <div className="space-y-2">
                     <button
                       onClick={() => {
@@ -480,10 +451,10 @@ export const JobList = () => {
                   </div>
                 </>
               )}
-            </div>
-          </div>
+            </div>            </div>
           </MagneticCard>
-        ))}
+        ))
+        )}
       </div>
 
       {/* Pagination */}

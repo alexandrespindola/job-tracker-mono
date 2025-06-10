@@ -1,0 +1,27 @@
+{
+  "name": "Job Tracker Deutschland",
+  "short_name": "JobTracker.de",
+  "description": "Find your dream job in Germany. Search thousands of tech positions across Deutschland.",
+  "theme_color": "#0a0a0a",
+  "background_color": "#0a0a0a",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "32x32",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.svg",
+      "sizes": "180x180",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
+  "lang": "en-DE",
+  "orientation": "portrait-primary"
+}
