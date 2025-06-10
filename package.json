@@ -8,7 +8,7 @@
   ],
   "scripts": {
     "dev": "bun run --filter backend dev & bun run --filter frontend dev",
-    "build": "cd packages/shared && bun run build && cd ../.. && cd apps/backend && bun run build && cd ../frontend && bun run build",
+    "build": "./deploy.sh",
     "clean": "rm -rf apps/*/dist packages/*/dist",
     "start": "cd apps/backend && bun run start"
   },

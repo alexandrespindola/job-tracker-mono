@@ -1,9 +1,5 @@
 [build]
-command = "cd packages/shared && bun install && bun run build && cd ../../apps/backend && bun install"
+command = "./deploy.sh"
 
 [deploy]
 startCommand = "cd apps/backend && bun run start"
-healthcheckPath = "/"
-healthcheckTimeout = 100
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10

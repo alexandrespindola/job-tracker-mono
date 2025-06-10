@@ -10,6 +10,3 @@ cd ../../apps/backend
 bun install
 
 echo "✅ Build completed!"
-
-echo "🌐 Starting server..."
-bun run start
