@@ -4,15 +4,17 @@ import { jobAPI } from '../services/api'
 
 // Skeleton loading component
 const JobSkeleton = () => (
-  <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm animate-pulse">
-    <div className="h-5 bg-gray-200 rounded w-3/4 mb-3"></div>
-    <div className="space-y-2">
-      <div className="h-3 bg-gray-200 rounded w-1/2"></div>
-      <div className="h-3 bg-gray-200 rounded w-2/3"></div>
-      <div className="h-3 bg-gray-200 rounded w-1/3"></div>
-      <div className="h-3 bg-gray-200 rounded w-1/4 mt-2"></div>
+  <div className="card animate-pulse">
+    <div className="p-6">
+      <div className="h-6 bg-dark-700 rounded-lg w-3/4 mb-4"></div>
+      <div className="space-y-3">
+        <div className="h-4 bg-dark-700 rounded w-1/2"></div>
+        <div className="h-4 bg-dark-700 rounded w-2/3"></div>
+        <div className="h-4 bg-dark-700 rounded w-1/3"></div>
+        <div className="h-3 bg-dark-700 rounded w-1/4 mt-4"></div>
+      </div>
+      <div className="h-10 bg-dark-700 rounded-lg w-28 mt-6"></div>
     </div>
-    <div className="h-8 bg-gray-200 rounded w-24 mt-3"></div>
   </div>
 )
 
@@ -59,21 +61,21 @@ const Pagination = ({
   if (totalPages <= 1) return null
 
   return (
-    <div className="flex items-center justify-center space-x-2 mt-8">
+    <div className="flex items-center justify-center space-x-3 mt-12">
       {/* Previous button */}
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage <= 1 || isLoading}
-        className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-4 py-2 text-sm font-medium text-gray-300 bg-dark-800 border border-dark-600 rounded-lg hover:bg-dark-700 hover:border-german-gold/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
       >
-        Previous
+        ← Previous
       </button>
 
       {/* Page numbers */}
       {getVisiblePages().map((page, index) => {
         if (page === '...') {
           return (
-            <span key={`dots-${index}`} className="px-3 py-2 text-sm font-medium text-gray-400">
+            <span key={`dots-${index}`} className="px-3 py-2 text-sm font-medium text-gray-500">
               ...
             </span>
           )
@@ -87,10 +89,10 @@ const Pagination = ({
             key={pageNum}
             onClick={() => onPageChange(pageNum)}
             disabled={isLoading}
-            className={`px-3 py-2 text-sm font-medium rounded-md disabled:cursor-not-allowed ${
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 disabled:cursor-not-allowed ${
               isActive
-                ? 'bg-blue-600 text-white border border-blue-600'
-                : 'text-gray-500 bg-white border border-gray-300 hover:bg-gray-50'
+                ? 'bg-german-red text-white border border-german-red shadow-lg'
+                : 'text-gray-300 bg-dark-800 border border-dark-600 hover:bg-dark-700 hover:border-german-gold/50'
             }`}
           >
             {pageNum}
@@ -102,9 +104,9 @@ const Pagination = ({
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage >= totalPages || isLoading}
-        className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="px-4 py-2 text-sm font-medium text-gray-300 bg-dark-800 border border-dark-600 rounded-lg hover:bg-dark-700 hover:border-german-gold/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
       >
-        Next
+        Next →
       </button>
     </div>
   )
@@ -182,13 +184,17 @@ export const JobList = () => {
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto p-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
-          Job Tracker - Deutschland 🇩🇪
-        </h1>
-        <div className="h-6 bg-gray-200 rounded w-48 mb-6 animate-pulse"></div>
+      <div className="max-w-7xl mx-auto p-6 animate-fade-in">
+        {/* Hero Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-5xl md:text-6xl font-display font-bold mb-4">
+            <span className="text-gradient">Job Tracker</span>
+          </h1>
+          <p className="text-xl text-gray-300 font-light">Deutschland 🇩🇪</p>
+          <div className="h-1 w-24 bg-german-red mx-auto mt-4 rounded-full animate-pulse"></div>
+        </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Array.from({ length: 9 }).map((_, index) => (
             <JobSkeleton key={index} />
           ))}
@@ -198,18 +204,24 @@ export const JobList = () => {
   }
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-gray-900 mb-6">
-        Job Tracker - Deutschland 🇩🇪
-      </h1>
+    <div className="max-w-7xl mx-auto p-6 animate-fade-in">
+      {/* Hero Header */}
+      <div className="text-center mb-12">
+        <h1 className="text-5xl md:text-6xl font-display font-bold mb-4">
+          <span className="text-gradient">Job Tracker</span>
+        </h1>
+        <p className="text-xl text-gray-300 font-light mb-2">Deutschland 🇩🇪</p>
+        <p className="text-gray-400">Find your next opportunity in Germany's tech scene</p>
+        <div className="h-1 w-24 bg-german-red mx-auto mt-4 rounded-full"></div>
+      </div>
 
       {/* Search Filters */}
-      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6 shadow-sm">
-        <form onSubmit={handleSearch} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div>
-              <label htmlFor="was" className="block text-sm font-medium text-gray-700 mb-1">
-                Job Title / Keywords (Was)
+      <div className="card p-8 mb-8 max-w-4xl mx-auto">
+        <form onSubmit={handleSearch} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <label htmlFor="was" className="block text-sm font-display font-medium text-gray-200">
+                🔍 Job Title / Keywords
               </label>
               <input
                 type="text"
@@ -217,13 +229,13 @@ export const JobList = () => {
                 value={tempFilters.was}
                 onChange={(e) => handleFilterChange('was', e.target.value)}
                 placeholder="e.g. entwickler, developer, designer"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 input-dark rounded-lg focus:outline-none transition-all duration-200"
               />
             </div>
             
-            <div>
-              <label htmlFor="wo" className="block text-sm font-medium text-gray-700 mb-1">
-                Location (Wo)
+            <div className="space-y-2">
+              <label htmlFor="wo" className="block text-sm font-display font-medium text-gray-200">
+                📍 Location
               </label>
               <input
                 type="text"
@@ -231,89 +243,126 @@ export const JobList = () => {
                 value={tempFilters.wo}
                 onChange={(e) => handleFilterChange('wo', e.target.value)}
                 placeholder="e.g. berlin, münchen, hamburg"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 input-dark rounded-lg focus:outline-none transition-all duration-200"
               />
             </div>
 
-            <div className="flex items-end">
+            <div className="flex flex-col justify-end">
               <button
                 type="submit"
                 disabled={loading || isLoadingMore}
-                className="w-full px-4 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="btn-primary h-12 disabled:opacity-50 disabled:cursor-not-allowed font-display"
               >
-                {loading ? 'Searching...' : 'Search Jobs'}
+                {loading ? (
+                  <span className="flex items-center justify-center">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Searching...
+                  </span>
+                ) : (
+                  'Search Jobs 🚀'
+                )}
               </button>
             </div>
           </div>
           
-          <div className="text-sm text-gray-600">
-            <strong>Current search:</strong> "{searchFilters.was}" in "{searchFilters.wo}"
+          <div className="text-center">
+            <div className="inline-flex items-center px-4 py-2 bg-dark-700/50 rounded-full text-sm text-gray-300">
+              <span className="w-2 h-2 bg-german-gold rounded-full mr-2 animate-pulse"></span>
+              Current search: <span className="font-medium text-german-gold mx-1">"{searchFilters.was}"</span> 
+              in <span className="font-medium text-german-gold ml-1">"{searchFilters.wo}"</span>
+            </div>
           </div>
         </form>
       </div>
 
-      <div className="flex justify-between items-center mb-6">
-        <p className="text-gray-600">
-          {totalJobs} vacancies found
-        </p>
+      {/* Stats Bar */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8 p-6 card">
+        <div className="flex items-center space-x-4 mb-4 md:mb-0">
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-german-red rounded-full"></div>
+            <span className="text-gray-200 font-display font-medium">
+              {totalJobs.toLocaleString()} opportunities found
+            </span>
+          </div>
+        </div>
+        
         {totalJobs > 0 && (
-          <p className="text-sm text-gray-500">
-            Page {currentPage} of {totalPages} ({jobs.length} jobs shown)
-          </p>
+          <div className="text-sm text-gray-400 flex items-center space-x-2">
+            <span>Page {currentPage} of {totalPages}</span>
+            <span className="w-1 h-1 bg-gray-500 rounded-full"></span>
+            <span>{jobs.length} jobs shown</span>
+          </div>
         )}
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {jobs.map(job => (
-          <div key={job.refnr} className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2">
-              {job.titel}
-            </h3>
-            <div className="space-y-1 text-gray-600 text-sm">
-              <p><span className="font-medium">Business:</span> {job.arbeitgeber}</p>
-              <p><span className="font-medium">Local:</span> {job.arbeitsort?.ort}, {job.arbeitsort?.region}</p>
-              <p><span className="font-medium">Position:</span> {job.beruf}</p>
-              <p className="text-xs text-gray-500">
-                Published: {job.aktuelleVeroeffentlichungsdatum}
-              </p>
-              <p className="text-xs text-gray-500">
-                Ref: {job.refnr}
-              </p>
+      {/* Jobs Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        {jobs.map((job, index) => (
+          <div key={job.refnr} className="card card-hover p-6 animate-slide-up" style={{animationDelay: `${index * 50}ms`}}>
+            {/* Job Header */}
+            <div className="mb-4">
+              <h3 className="text-xl font-display font-semibold text-gray-100 mb-2 line-clamp-2 leading-tight">
+                {job.titel}
+              </h3>
+              <div className="flex items-center space-x-2 text-sm text-german-gold">
+                <span className="font-medium">{job.arbeitgeber}</span>
+              </div>
             </div>
             
-            <div className="mt-3 flex flex-col gap-2">
+            {/* Job Details */}
+            <div className="space-y-2 text-sm text-gray-300 mb-6">
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-500">📍</span>
+                <span>{job.arbeitsort?.ort}, {job.arbeitsort?.region}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-500">💼</span>
+                <span>{job.beruf}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-500">📅</span>
+                <span>{new Date(job.aktuelleVeroeffentlichungsdatum).toLocaleDateString()}</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-gray-500">#</span>
+                <span className="text-xs text-gray-400">{job.refnr}</span>
+              </div>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="space-y-3">
               {job.externeUrl ? (
                 <a 
                   href={job.externeUrl} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="inline-block px-3 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors text-center"
+                  className="block w-full text-center btn-primary"
                 >
-                  Apply Now
+                  Apply Now 🚀
                 </a>
               ) : (
                 <>
-                  <div className="text-xs text-amber-600 font-medium mb-1 flex items-center">
-                    ⚠️ No direct application link - Alternative options:
+                  <div className="text-xs text-german-gold font-medium mb-3 flex items-center justify-center bg-german-gold/10 py-2 px-3 rounded-lg">
+                    ⚠️ Alternative application options:
                   </div>
-                  <div className="space-y-1">
+                  <div className="space-y-2">
                     <button
                       onClick={() => {
                         const searchQuery = `${job.titel} ${job.arbeitgeber} ${job.arbeitsort?.ort}`
                         const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery + ' jobs application')}`
                         window.open(googleUrl, '_blank')
                       }}
-                      className="w-full px-3 py-2 bg-green-600 text-white text-sm rounded hover:bg-green-700 transition-colors flex items-center justify-center"
+                      className="w-full px-4 py-2 bg-green-700 hover:bg-green-800 text-white text-sm rounded-lg transition-all duration-200 flex items-center justify-center font-medium"
                     >
                       🔍 Search on Google
                     </button>
                     <button
                       onClick={() => {
-                        const companyQuery = `${job.arbeitgeber} careers jobs site:${job.arbeitgeber.toLowerCase().replace(/\s+/g, '')}.de OR site:${job.arbeitgeber.toLowerCase().replace(/\s+/g, '')}.com`
+                        const companyQuery = `${job.arbeitgeber} careers jobs`
                         const companyUrl = `https://www.google.com/search?q=${encodeURIComponent(companyQuery)}`
                         window.open(companyUrl, '_blank')
                       }}
-                      className="w-full px-3 py-2 bg-gray-600 text-white text-sm rounded hover:bg-gray-700 transition-colors flex items-center justify-center"
+                      className="w-full px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded-lg transition-all duration-200 flex items-center justify-center font-medium"
                     >
                       🏢 Company Careers
                     </button>
@@ -321,9 +370,9 @@ export const JobList = () => {
                       href={`https://www.arbeitsagentur.de/jobsuche/jobdetail/${job.refnr}`}
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="flex w-full px-3 py-2 bg-orange-600 text-white text-sm rounded hover:bg-orange-700 transition-colors items-center justify-center"
+                      className="block w-full px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-german-black text-sm rounded-lg transition-all duration-200 text-center font-medium"
                     >
-                      🇩🇪 View on Arbeitsagentur
+                      🇩🇪 Arbeitsagentur
                     </a>
                   </div>
                 </>

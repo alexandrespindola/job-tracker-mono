@@ -1,3 +1,64 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Global Dark Theme */
+@layer base {
+  * {
+    border-color: theme('colors.dark.700');
+  }
+  
+  body {
+    @apply bg-german-subtle text-gray-100 font-body;
+    background-attachment: fixed;
+  }
+  
+  /* Custom scrollbar - Modern German theme */
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #fbbf24, #ef4444);
+    border-radius: 10px;
+    border: 1px solid rgba(0,0,0,0.2);
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #fde047, #f87171);
+    box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+  }
+}
+
+/* Component Utilities */
+@layer components {
+  .card {
+    @apply bg-dark-800/80 backdrop-blur-sm border border-dark-700 rounded-xl shadow-xl;
+    background: linear-gradient(145deg, rgb(23 23 23 / 0.9), rgb(10 10 10 / 0.9));
+  }
+  
+  .card-hover {
+    @apply hover:shadow-2xl hover:border-german-red/30 hover:bg-dark-700/90 transition-all duration-300;
+  }
+  
+  .btn-primary {
+    @apply bg-red-700 hover:bg-red-600 text-white font-medium px-4 py-2 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl;
+  }
+  
+  .btn-secondary {
+    @apply bg-dark-700 hover:bg-dark-600 text-gray-100 font-medium px-4 py-2 rounded-lg transition-all duration-200 border border-dark-600;
+  }
+  
+  .input-dark {
+    @apply bg-dark-800 border-dark-600 text-gray-100 placeholder-gray-400 focus:border-german-gold focus:ring-2 focus:ring-german-gold/20;
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-german-gold to-german-red bg-clip-text text-transparent;
+  }
+}
