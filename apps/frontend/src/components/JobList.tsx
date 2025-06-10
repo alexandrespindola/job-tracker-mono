@@ -2,18 +2,114 @@ import { useState, useEffect } from 'react'
 import type { Job } from '../../../../packages/shared/src/types'
 import { jobAPI } from '../services/api'
 
+// Interface for cursor trail dots
+interface TrailDot {
+  id: number
+  x: number
+  y: number
+  color: string
+}
+
+// German Flag Cursor Trail Component
+const CursorTrail = () => {
+  const [trail, setTrail] = useState<TrailDot[]>([])
+  
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      const germanColors = ['#000000', '#ff0000', '#ffce00'] // Black, Red, Gold
+      const newDot: TrailDot = {
+        id: Date.now() + Math.random(),
+        x: e.clientX,
+        y: e.clientY,
+        color: germanColors[Math.floor(Math.random() * 3)]
+      }
+      
+      setTrail(prev => [...prev.slice(-15), newDot]) // Keep last 15 dots
+    }
+    
+    window.addEventListener('mousemove', handleMouseMove)
+    return () => window.removeEventListener('mousemove', handleMouseMove)
+  }, [])
+  
+  return (
+    <div className="fixed inset-0 pointer-events-none z-50">
+      {trail.map((dot, i) => (
+        <div
+          key={dot.id}
+          className="absolute rounded-full animate-fade-trail"
+          style={{
+            left: dot.x - 3,
+            top: dot.y - 3,
+            width: Math.max(6 - (i * 0.3), 1),
+            height: Math.max(6 - (i * 0.3), 1),
+            backgroundColor: dot.color,
+            opacity: Math.max(1 - (i * 0.08), 0),
+            boxShadow: `0 0 ${Math.max(8 - i, 2)}px ${dot.color}40`,
+            animation: `fade-trail 0.8s ease-out forwards`
+          }}
+        />
+      ))}
+    </div>
+  )
+}
+
+// Magnetic Card Component with advanced interactions
+const MagneticCard = ({ children, className = "", ...props }) => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const [isHovered, setIsHovered] = useState(false)
+  
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const centerX = rect.left + rect.width / 2
+    const centerY = rect.top + rect.height / 2
+    
+    const maxDistance = 15 // Maximum magnetic pull distance
+    const magneticStrength = 0.15 // How strong the magnetic effect is
+    
+    setMousePosition({
+      x: (e.clientX - centerX) * magneticStrength,
+      y: (e.clientY - centerY) * magneticStrength
+    })
+  }
+  
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+  }
+  
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+    setMousePosition({ x: 0, y: 0 })
+  }
+  
+  return (
+    <div 
+      className={`transform-gpu transition-all duration-300 ease-out ${className}`}
+      style={{ 
+        transform: `translate3d(${mousePosition.x}px, ${mousePosition.y}px, 0) ${isHovered ? 'scale(1.02)' : 'scale(1)'}`,
+        filter: isHovered ? 'brightness(1.1)' : 'brightness(1)'
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      {...props}
+    >
+      {children}
+    </div>
+  )
+}
+
 // Skeleton loading component
 const JobSkeleton = () => (
-  <div className="card animate-pulse">
+  <div className="glass-card animate-pulse">
     <div className="p-6">
-      <div className="h-6 bg-dark-700 rounded-lg w-3/4 mb-4"></div>
+      <div className="h-6 bg-white/10 rounded-lg w-3/4 mb-4"></div>
       <div className="space-y-3">
-        <div className="h-4 bg-dark-700 rounded w-1/2"></div>
-        <div className="h-4 bg-dark-700 rounded w-2/3"></div>
-        <div className="h-4 bg-dark-700 rounded w-1/3"></div>
-        <div className="h-3 bg-dark-700 rounded w-1/4 mt-4"></div>
+        <div className="h-4 bg-white/10 rounded w-1/2"></div>
+        <div className="h-4 bg-white/10 rounded w-2/3"></div>
+        <div className="h-4 bg-white/10 rounded w-1/3"></div>
+        <div className="h-3 bg-white/10 rounded w-1/4 mt-4"></div>
       </div>
-      <div className="h-10 bg-dark-700 rounded-lg w-28 mt-6"></div>
+      <div className="h-10 bg-white/10 rounded-lg w-28 mt-6"></div>
     </div>
   </div>
 )
@@ -205,6 +301,12 @@ export const JobList = () => {
 
   return (
     <div className="max-w-7xl mx-auto p-6 animate-fade-in">
+      {/* German Flag Cursor Trail */}
+      <CursorTrail />
+      
+      {/* Click Pulse Effect */}
+      <ClickPulse />
+      
       {/* Hero Header */}
       <div className="text-center mb-12">
         <h1 className="text-5xl md:text-6xl font-display font-bold mb-4">
@@ -216,7 +318,7 @@ export const JobList = () => {
       </div>
 
       {/* Search Filters */}
-      <div className="card p-8 mb-8 max-w-4xl mx-auto">
+      <div className="premium-glass p-8 mb-8 max-w-4xl mx-auto rounded-xl">
         <form onSubmit={handleSearch} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="space-y-2">
@@ -251,7 +353,7 @@ export const JobList = () => {
               <button
                 type="submit"
                 disabled={loading || isLoadingMore}
-                className="btn-primary h-12 disabled:opacity-50 disabled:cursor-not-allowed font-display"
+                className="btn-primary btn-magnetic ripple pulse-glow h-12 disabled:opacity-50 disabled:cursor-not-allowed font-display"
               >
                 {loading ? (
                   <span className="flex items-center justify-center">
@@ -276,7 +378,7 @@ export const JobList = () => {
       </div>
 
       {/* Stats Bar */}
-      <div className="flex flex-col md:flex-row justify-between items-center mb-8 p-6 card">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8 p-6 glass-card">
         <div className="flex items-center space-x-4 mb-4 md:mb-0">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-german-red rounded-full"></div>
@@ -298,16 +400,17 @@ export const JobList = () => {
       {/* Jobs Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
         {jobs.map((job, index) => (
-          <div key={job.refnr} className="card card-hover p-6 animate-slide-up" style={{animationDelay: `${index * 50}ms`}}>
-            {/* Job Header */}
-            <div className="mb-4">
-              <h3 className="text-xl font-display font-semibold text-gray-100 mb-2 line-clamp-2 leading-tight">
-                {job.titel}
-              </h3>
-              <div className="flex items-center space-x-2 text-sm text-german-gold">
-                <span className="font-medium">{job.arbeitgeber}</span>
+          <MagneticCard key={job.refnr} className="animate-slide-up" style={{animationDelay: `${index * 50}ms`}}>
+            <div className="glass-card glow-effect p-6 h-full">
+              {/* Job Header */}
+              <div className="mb-4">
+                <h3 className="text-xl font-display font-semibold text-gray-100 mb-2 line-clamp-2 leading-tight">
+                  {job.titel}
+                </h3>
+                <div className="flex items-center space-x-2 text-sm text-german-gold">
+                  <span className="font-medium">{job.arbeitgeber}</span>
+                </div>
               </div>
-            </div>
             
             {/* Job Details */}
             <div className="space-y-2 text-sm text-gray-300 mb-6">
@@ -336,7 +439,7 @@ export const JobList = () => {
                   href={job.externeUrl} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="block w-full text-center btn-primary"
+                  className="block w-full text-center btn-primary btn-magnetic ripple hover-lift"
                 >
                   Apply Now 🚀
                 </a>
@@ -352,7 +455,7 @@ export const JobList = () => {
                         const googleUrl = `https://www.google.com/search?q=${encodeURIComponent(searchQuery + ' jobs application')}`
                         window.open(googleUrl, '_blank')
                       }}
-                      className="w-full px-4 py-2 bg-green-700 hover:bg-green-800 text-white text-sm rounded-lg transition-all duration-200 flex items-center justify-center font-medium"
+                      className="w-full px-4 py-2 bg-green-700 hover:bg-green-800 text-white text-sm rounded-lg transition-all duration-200 flex items-center justify-center font-medium ripple hover-lift"
                     >
                       🔍 Search on Google
                     </button>
@@ -362,7 +465,7 @@ export const JobList = () => {
                         const companyUrl = `https://www.google.com/search?q=${encodeURIComponent(companyQuery)}`
                         window.open(companyUrl, '_blank')
                       }}
-                      className="w-full px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded-lg transition-all duration-200 flex items-center justify-center font-medium"
+                      className="w-full px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white text-sm rounded-lg transition-all duration-200 flex items-center justify-center font-medium ripple hover-lift"
                     >
                       🏢 Company Careers
                     </button>
@@ -370,7 +473,7 @@ export const JobList = () => {
                       href={`https://www.arbeitsagentur.de/jobsuche/jobdetail/${job.refnr}`}
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="block w-full px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-german-black text-sm rounded-lg transition-all duration-200 text-center font-medium"
+                      className="block w-full px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-german-black text-sm rounded-lg transition-all duration-200 text-center font-medium ripple hover-lift"
                     >
                       🇩🇪 Arbeitsagentur
                     </a>
@@ -379,6 +482,7 @@ export const JobList = () => {
               )}
             </div>
           </div>
+          </MagneticCard>
         ))}
       </div>
 
@@ -389,6 +493,50 @@ export const JobList = () => {
         onPageChange={handlePageChange}
         isLoading={isLoadingMore}
       />
+    </div>
+  )
+}
+
+// Click Pulse Effect Component
+const ClickPulse = () => {
+  const [pulses, setPulses] = useState<Array<{id: number, x: number, y: number}>>([])
+  
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const newPulse = {
+        id: Date.now(),
+        x: e.clientX,
+        y: e.clientY
+      }
+      
+      setPulses(prev => [...prev, newPulse])
+      
+      // Remove pulse after animation
+      setTimeout(() => {
+        setPulses(prev => prev.filter(p => p.id !== newPulse.id))
+      }, 600)
+    }
+    
+    window.addEventListener('click', handleClick)
+    return () => window.removeEventListener('click', handleClick)
+  }, [])
+  
+  return (
+    <div className="fixed inset-0 pointer-events-none z-40">
+      {pulses.map(pulse => (
+        <div
+          key={pulse.id}
+          className="absolute rounded-full border-2"
+          style={{
+            left: pulse.x - 20,
+            top: pulse.y - 20,
+            width: 40,
+            height: 40,
+            borderColor: '#fbbf24',
+            animation: 'click-pulse 0.6s ease-out forwards'
+          }}
+        />
+      ))}
     </div>
   )
 }

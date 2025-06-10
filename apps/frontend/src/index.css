@@ -33,6 +33,92 @@
     background: linear-gradient(45deg, #fde047, #f87171);
     box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
   }
+
+  /* Glassmorphism Background */
+  .glass-bg {
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(239, 68, 68, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 60% 60%, rgba(0, 0, 0, 0.1) 0%, transparent 50%);
+    animation: float-particles 20s ease-in-out infinite;
+  }
+
+  /* Floating animation for particles */
+  @keyframes float-particles {
+    0%, 100% { 
+      background-position: 0% 50%, 100% 50%, 50% 0%, 50% 100%; 
+    }
+    25% { 
+      background-position: 10% 60%, 90% 40%, 40% 10%, 60% 90%; 
+    }
+    50% { 
+      background-position: 20% 40%, 80% 60%, 60% 20%, 40% 80%; 
+    }
+    75% { 
+      background-position: 15% 70%, 85% 30%, 30% 15%, 70% 85%; 
+    }
+  }
+
+  /* Fade in animation */
+  @keyframes fade-in {
+    from { 
+      opacity: 0; 
+      transform: translateY(20px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+
+  /* Slide up animation */
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slide-up 0.6s ease-out both;
+  }
+
+  /* Cursor Trail Animation */
+  @keyframes fade-trail {
+    0% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(0.3);
+    }
+  }
+
+  .animate-fade-trail {
+    animation: fade-trail 0.8s ease-out forwards;
+  }
+
+  /* Click Pulse Animation */
+  @keyframes click-pulse {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
 }
 
 /* Component Utilities */
@@ -40,6 +126,28 @@
   .card {
     @apply bg-dark-800/80 backdrop-blur-sm border border-dark-700 rounded-xl shadow-xl;
     background: linear-gradient(145deg, rgb(23 23 23 / 0.9), rgb(10 10 10 / 0.9));
+  }
+
+  /* Glassmorphism Card */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    @apply rounded-xl;
+  }
+
+  .glass-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    box-shadow: 
+      0 12px 40px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 215, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .card-hover {
@@ -60,5 +168,120 @@
   
   .text-gradient {
     @apply bg-gradient-to-r from-german-gold to-german-red bg-clip-text text-transparent;
+  }
+
+  /* Premium Glass Effect */
+  .premium-glass {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(25px) saturate(1.5);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 
+      0 16px 40px rgba(0, 0, 0, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .glow-effect {
+    position: relative;
+  }
+
+  .glow-effect::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent, rgba(239, 68, 68, 0.1), transparent);
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .glow-effect:hover::before {
+    opacity: 1;
+  }
+
+  /* Micro-interactions */
+  .btn-magnetic {
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-magnetic::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-magnetic:hover::before {
+    left: 100%;
+  }
+
+  .btn-magnetic:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+  }
+
+  /* Ripple effect */
+  .ripple {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+
+  .ripple:active::after {
+    width: 300px;
+    height: 300px;
+  }
+
+  /* Pulse animation for important elements */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite alternate;
+  }
+
+  @keyframes pulse-glow {
+    from {
+      box-shadow: 0 0 5px rgba(255, 215, 0, 0.2);
+    }
+    to {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.4), 0 0 30px rgba(255, 215, 0, 0.1);
+    }
+  }
+
+  /* Smooth focus states */
+  .focus-ring:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+    border-color: #fbbf24;
+  }
+
+  /* Hover lift animation */
+  .hover-lift {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
   }
 }
