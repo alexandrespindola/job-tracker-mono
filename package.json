@@ -1,0 +1,15 @@
+{
+  "name": "job-tracker",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun --filter backend dev & bun --filter frontend dev",
+    "build": "bun --filter shared build && bun run --filter backend build && bun run --filter frontend build",
+    "clean": "rm -rf apps/*/dist packages/*/dist"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  }
+}
