@@ -7,6 +7,9 @@
   
   # Diretório base do projeto
   base = "."
+  
+  # Deploy apenas quando frontend ou shared mudarem
+  ignore = "bash scripts/ignore-netlify-build.sh"
 
 [build.environment]
   # Versão do Node.js
