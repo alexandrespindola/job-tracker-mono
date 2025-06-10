@@ -1,21 +1,21 @@
 #!/bin/bash
 
-# Script para ignorar build do Netlify quando não há mudanças no frontend
+# Script to ignore Netlify build when there are no frontend changes
 
-# Obter o commit anterior
+# Get previous commit
 PREVIOUS_COMMIT=$(git rev-parse HEAD^)
 CURRENT_COMMIT=$(git rev-parse HEAD)
 
-# Verificar se há mudanças no frontend ou shared
+# Check if there are changes in frontend or shared
 FRONTEND_CHANGES=$(git diff --name-only $PREVIOUS_COMMIT $CURRENT_COMMIT | grep -E '^(apps/frontend|packages/shared|netlify\.toml)')
 BACKEND_ONLY_CHANGES=$(git diff --name-only $PREVIOUS_COMMIT $CURRENT_COMMIT | grep -E '^apps/backend')
 
-# Se só há mudanças no backend, pular o build
+# If there are only backend changes, skip the build
 if [ -z "$FRONTEND_CHANGES" ] && [ -n "$BACKEND_ONLY_CHANGES" ]; then
   echo "🚫 Only backend changes detected. Skipping frontend build."
   exit 1
 fi
 
-# Se há mudanças no frontend ou shared, continuar com o build
+# If there are frontend or shared changes, continue with the build
 echo "✅ Frontend or shared changes detected. Proceeding with build."
 exit 0

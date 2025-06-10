@@ -1,30 +1,30 @@
 [build]
-  # Comando para buildar o projeto
+  # Build command for the project
   command = "cd packages/shared && bun run build && cd ../../apps/frontend && bun install && bun run build"
   
-  # Diretório de build (onde estão os arquivos estáticos)
+  # Build directory (where static files are located)
   publish = "apps/frontend/dist"
   
-  # Diretório base do projeto
+  # Base directory of the project
   base = "."
   
-  # Deploy apenas quando frontend ou shared mudarem
+  # Deploy only when frontend or shared files change
   ignore = "bash scripts/ignore-netlify-build.sh"
 
 [build.environment]
-  # Versão do Node.js
+  # Node.js version
   NODE_VERSION = "18"
   
-  # Instalar Bun
+  # Install Bun
   BUN_VERSION = "1.2.4"
 
-# Redirects para SPA (Single Page Application)
+# Redirects for SPA (Single Page Application)
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# Headers de segurança
+# Security headers
 [[headers]]
   for = "/*"
   [headers.values]
@@ -33,7 +33,7 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Cache para assets estáticos
+# Cache for static assets
 [[headers]]
   for = "/assets/*"
   [headers.values]

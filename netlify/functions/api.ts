@@ -7,7 +7,7 @@ const app = new Hono()
 // Health check
 app.get('/', (c) => c.json({ message: 'Job Tracker API running! 🚀' }))
 
-// API para buscar vagas alemãs
+// API to fetch German job listings
 app.get('/api/jobs', async (c) => {
   const params: JobSearchParams = {
     was: c.req.query('was') || 'junior entwickler',
