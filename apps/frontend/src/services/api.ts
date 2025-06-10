@@ -5,10 +5,10 @@ class JobAPI {
 
   async searchJobs(params: Partial<JobSearchParams> = {}): Promise<JobResponse> {
     const queryParams = new URLSearchParams({
-      was: params.was || 'junior entwickler',
+      was: params.was || 'entwickler',
       wo: params.wo || 'koln',
       page: (params.page || 1).toString(),
-      size: (params.size || 25).toString()
+      size: (params.size || 20).toString()
     })
 
     const response = await fetch(`${this.baseURL}/api/jobs?${queryParams}`)
