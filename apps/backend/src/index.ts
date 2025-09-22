@@ -20,7 +20,7 @@ app.use('*', cors({
 }))
 
 // Health check
-app.get('/', (c) => c.json({ message: 'Job Tracker API running! 🚀' }))
+app.get('/', (c) => c.json({ message: 'Job Tracker API running! 🚀 2' }))
 
 // API to fetch german job listings
 app.get('/api/jobs', async (c) => {
